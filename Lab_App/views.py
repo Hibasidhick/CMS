@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.utils.dateparse import parse_date
-from .models import LabTestPrescription
+from Doc_App.models import LabTestPrescription
 from CMS_App.models import LabReport, LabTest,LabTestBill
 from .serializers import LabReportSerializer, LabTestPrescriptionSerializer,LabTestSerializer,LabTestBillSerializer
 
@@ -165,7 +165,7 @@ class DeactivateLabTestView(APIView):
 # ✅ Create LabTechBill (POST /api/labtechbills/)
 class CreateLabTechBillView(APIView):
     def post(self, request):
-        serializer = LabTechBillSerializer(data=request.data)
+        serializer = LabTestBillSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "Bill created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
@@ -174,15 +174,15 @@ class CreateLabTechBillView(APIView):
 # ✅ Retrieve Single Bill (GET /api/labtechbills/{billId}/)
 class GetLabTechBillByIdView(APIView):
     def get(self, request, billId):
-        bill = get_object_or_404(LabTechBill, pk=billId)
-        serializer = LabTechBillSerializer(bill)
+        bill = get_object_or_404(LabTestBill, pk=billId)
+        serializer = LabTestBillSerializer(bill)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 # ✅ Update LabTechBill (PUT /api/labtechbills/{billId}/)
 class UpdateLabTechBillView(APIView):
     def put(self, request, billId):
-        bill = get_object_or_404(LabTechBill, pk=billId)
-        serializer = LabTechBillSerializer(bill, data=request.data, partial=True)
+        bill = get_object_or_404(LabTestBill, pk=billId)
+        serializer = LabTestBillSerializer(bill, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "Bill updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
@@ -191,13 +191,13 @@ class UpdateLabTechBillView(APIView):
 # ✅ Delete LabTechBill (DELETE /api/labtechbills/{billId}/)
 class DeleteLabTechBillView(APIView):
     def delete(self, request, billId):
-        bill = get_object_or_404(LabTechBill, pk=billId)
+        bill = get_object_or_404(LabTestBill, pk=billId)
         bill.delete()
         return Response({"message": "Bill deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 # ✅ List All LabTechBills (GET /api/labtechbills/)
 class ListLabTechBillsView(APIView):
     def get(self, request):
-        bills = LabTechBill.objects.all()
-        serializer = LabTechBillSerializer(bills, many=True)
+        bills = LabTestBill.objects.all()
+        serializer = LabTestBillSerializer(bills, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

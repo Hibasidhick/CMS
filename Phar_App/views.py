@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -143,4 +142,4 @@ class ListMedicineBillsView(APIView):
         bills = MedicineBill.objects.all()
         serializer = MedicineBillSerializer(bills, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
->>>>>>> a448412acc0820a43bc3ddd79cc947af4045fe38
+
