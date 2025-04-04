@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'CMS_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hospital_management_system',
+        'NAME': 'cmsdb',
         'USER': 'root',
-        'PASSWORD': 'Hiba@1999',
+        'PASSWORD': 'faith',
         'HOST': 'localhost',
         'PORT': 3306,
     }
