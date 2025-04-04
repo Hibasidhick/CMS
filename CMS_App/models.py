@@ -3,11 +3,7 @@ from datetime import date
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group,User
-# Create your models here.
 
-# roles = ["Admin", "Receptionist", "Doctor", "Lab Technician", "Pharmacist"]
-# for role in roles:
-#     Group.objects.get_or_create(name=role) 
 
 class Receptionist(models.Model):
     rec_id = models.AutoField(primary_key=True)
@@ -19,6 +15,7 @@ class Receptionist(models.Model):
     email = models.EmailField(unique=True)
     qualification = models.CharField(max_length=100)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -50,6 +47,7 @@ class Doctor(models.Model):
     salary = models.DecimalField(max_digits=10, decimal_places=2)
     consultation_time = models.TimeField()
     consultation_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.doc_name} - {self.specialization}"
@@ -63,6 +61,7 @@ class LabTechnician(models.Model):
     email_id = models.EmailField(unique=True)
     qualification = models.CharField(max_length=255)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -76,6 +75,7 @@ class Pharmacist(models.Model):
     email_id = models.EmailField(unique=True)
     qualification = models.CharField(max_length=255)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -226,13 +226,15 @@ class LabReport(models.Model):
     report_id = models.AutoField(primary_key=True)
     patient = models.ForeignKey('Patient', on_delete=models.CASCADE)
     doctor = models.ForeignKey('Doctor', on_delete=models.SET_NULL, null=True, blank=True)
+    appointment = models.ForeignKey('Appointment', on_delete=models.CASCADE, null=True, blank=True)# Added Appointment ForeignKey
     test = models.ForeignKey('LabTest', on_delete=models.CASCADE)
     normal_range = models.CharField(max_length=100)
     actual_value = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Report {self.report_id} - {self.test.test_name} for {self.patient.full_name}"
+        return f"Report {self.report_id} - {self.test.test_name} for {self.patient.full_name} (Appointment {self.appointment.appointment_id})"
+
     
 class LabTestBill(models.Model):
     l_bill_id = models.AutoField(primary_key=True)
